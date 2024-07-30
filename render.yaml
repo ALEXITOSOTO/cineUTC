@@ -1,0 +1,26 @@
+databases:
+  - name: servidorLuis #Dar nombre
+    plan: free
+    databaseName: dbcine #Dar nombre a la bdd
+    user: alexander
+
+services:
+  - type: web
+    plan: free
+    name: cineUTC
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn cineUTC.asgi:application -k uvicorn.workers.UvicornWorker"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: servidorLuis
+          property: externalConnectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: cineutc-xns6.onrender.com #El url que te da render
+
+
+
+# set DATABASE_URL=postgresql://david:RkBAp8ZZaE98t5OiwtpfNnJmI0URw2K9@dpg-cqjettqj1k6c739rc1e0-a.oregon-postgres.render.com/dbcine
