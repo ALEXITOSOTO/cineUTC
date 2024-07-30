@@ -1,0 +1,31 @@
+{% extends "plantilla.html" %}
+{% block body %}
+<h1>Editar Director</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'procesarActualizacionDirector' %}" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ directorEditar.id }}">
+                    <label for="dni">DNI-CI</label>
+                    <input type="text" name="dni" id="dni" class="form-control" value="{{ directorEditar.dni }}" placeholder="Ingrese el dni del director">
+                    <label for="nombre"><b>Nombre:</b></label>
+                    <input type="text" name="nombre" class="form-control" value="{{ directorEditar.nombre }}" id="nombre" placeholder="Ingrese el nombre del director">
+                    <label for="apellido"><b>Apellido:</b></label>
+                    <input type="text" name="apellido" class="form-control" value="{{ directorEditar.apellido }}" id="apellido" placeholder="Ingrese el apellido del director">
+                    <label for="estado"><b>Estado:</b></label>
+                    <select name="estado" id="estado" class="form-control">
+                        <option value="True" {% if directorEditar.estado %} selected {% endif %}>Activo</option>
+                        <option value="False" {% if not directorEditar.estado %} selected {% endif %}>Inactivo</option>
+                    </select>
+                    <label for=""><b>Fotogografía:</b></label>
+                    <input type="file" name="foto" id="foto" 
+                    accept="image/*"
+                    required class="form-control">
+                <button type="submit" class="btn btn-warning">Actualizar</button>
+                <a href="{% url 'listadoDirectores' %}" class="btn btn-secondary ml-2">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

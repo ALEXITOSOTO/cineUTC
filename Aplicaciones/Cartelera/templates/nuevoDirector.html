@@ -1,0 +1,32 @@
+{% extends "./plantilla.html" %} <!--Heredar lo de platilla.html-->
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'guardarDirector' %}" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <label for=""><b>DNI-CI:</b></label>
+                <input type="text" name="dni" class="form-control" id="dni" placeholder="Ingrese el dni o cedula del director">
+                <label for=""><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Ingrese el nombre del director">
+                <label for=""><b>Apellido:</b></label>
+                <input type="text" name="apellido" class="form-control" id="apellido" placeholder="Ingrese el apellido del director">
+                <label for=""><b>Estado:</b></label>
+                <select name="estado" id="estado" class="form-control">
+                    <option value="True" {% if directorEditar.estado %} selected {% endif %}>Activo</option>
+                    <option value="False" {% if not directorEditar.estado %} selected {% endif %}>Inactivo</option>
+                </select>
+                <label for=""><b>Fotogografía:</b></label>
+                <input type="file" name="foto" id="foto" 
+                accept="image/*"
+                required class="form-control">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'listadoDirectores' %}">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

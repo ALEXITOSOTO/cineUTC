@@ -1,0 +1,21 @@
+{% extends "plantilla.html" %} <!--Heredar lo de platilla.html-->
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'guardarPais' %}" method="post">
+                {% csrf_token %}
+                <label for=""><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Ingrese el nombre del país">
+                <label for=""><b>Continente:</b></label>
+                <input type="text" name="continente" class="form-control" id="continente" placeholder="Ingrese el continente">
+                <label for=""><b>Capital:</b></label>
+                <input type="text" name="capital" class="form-control" id="capital" placeholder="Ingrese la capital">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="{% url 'listadoPaises' %}" class="btn btn-secondary ml-2">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

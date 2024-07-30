@@ -1,0 +1,74 @@
+{% extends "./plantilla.html" %} <!--Heredar lo de platilla.html-->
+{% block body %}
+{% load static %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'guardarGenero' %}" enctype="multipart/form-data" method="post" id="frm_nuevo_genero">
+                {% csrf_token %}
+                <label for=""><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Ingrese el nombre del genero"> <br>
+                <label for=""><b>Descripcion:</b></label>
+                <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripcion"></textarea><br>
+                <label for=""><b>Fotogografía:</b></label><br>
+                <input type="file" name="foto" id="foto" 
+                accept="image/*"
+                required class="form-control"><br>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <br>
+                <center>
+                    <img src="{% static 'img/cine.jpg' %}"  alt="" id="img" height="300px" width="300px" >
+                </center>
+                <br>
+                <div class="text-end">
+                    <button type="button" id="clearBtn" class="btn btn-primary"><i class="fa-solid fa-trash-can"></i> </button>
+                    <a href="{% static 'img/cine.jpg' %}" data-lightbox="footerGallery-1" id="maximizeLink" class="btn btn-primary"><i class="fa-solid fa-maximize"></i></a>
+                </div>
+                <br> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'listadoGeneros' %}">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br>
+
+<script>
+    $(document).ready(function() {
+        $("#foto").fileinput({                       
+            showBrowse: true,
+            browseOnZoneClick: true            
+        });
+    });
+    </script>
+
+<script>
+    $("#frm_nuevo_genero").validate({ //Usando jQuery para que capture el formulario y lo valide
+        rules:{ //Reglas de validacion 
+            nombre: { //nombre es el id de input nombre 
+                required:true,
+                minlength: 3,
+                maxlength: 10
+            },
+            descripcion: { //descripcion es el id de input descripcion 
+                required: true
+            },
+            foto: { //foto es el id de input foto 
+                required: true
+            }
+        },
+        messages:{
+            nombre: {
+                required:"Por favor ingresar el nombre"//Mensaje que se va a mostrar 
+                
+            },
+            descripcion: {
+                required: "Descripcion es obligatoria"
+            },
+            foto: {
+                required: "Ingresa una foto :)"
+            }
+        }
+    }); 
+</script>
+{% endblock %}

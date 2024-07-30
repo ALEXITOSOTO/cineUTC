@@ -1,0 +1,144 @@
+{% extends "./plantilla.html" %} <!--Heredar lo de platilla.html-->
+{% load static %}
+{% block body %}
+<div class="container">
+    <h1 class="text-center">Gestion de Peliculas con peticiones asicronas</h1>
+    <div class="row">
+        <div class="col-md-12 text-end"> 
+            <!-- Button trigger modal -->
+            <button class="btn btn-success" onclick="cargarPeliculas();"><i class="fas fa-refresh"></i>
+                Actualizar
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="fas fa-pencil fa-lg"></i>
+                <b>Guardar Pelicula</b>
+            </button>
+        </div>
+    </div>
+</div>
+<br>
+<div class="col-md-12" id="contenedor-Peliculas"> <!-- Llamar a la ruta de listadoPeliculas -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Pelicula</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" id="frm_nuevo_Pelicula">
+                    {% csrf_token %}
+                    <label for=""><b>Titulo:</b></label>
+                    <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Ingresar titulo del Pelicula"><br>
+                    <label for=""><b>Duracion:</b></label>
+                    <input type="text" id="duracion" name="duracion" class="form-control" placeholder="Ingresar duracion del Pelicula"><br>
+                    <label for=""><b>Sinopsis:</b></label>
+                    <input type="text" id="sinopsis" name="sinopsis" class="form-control" placeholder="Ingresar sinopsis de Pelicula"><br>
+                    <label for=""><b>Genero:</b></label>
+                    <input type="text" id="genero" name="genero" class="form-control" placeholder="Ingresar genero de la Pelicula"><br>
+                    <label for=""><b>Director:</b></label>
+                    <input type="text" id="director" name="director" class="form-control" placeholder="Ingresar director de la Pelicula"><br>
+                    <label for=""><b>Pais:</b></label>
+                    <input type="text" id="pais" name="pais" class="form-control" placeholder="Ingresar pais de origen"><br>
+                    <label for=""><b>Portada:</b></label>
+                    <input type="file" name="portada" id="portada" 
+                    accept="image/*"
+                    required class="form-control">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br>
+<script>
+    $("#frm_nuevo_Pelicula").validate({
+        rules:{
+            nombre:{
+                required: true
+            }, 
+            direccion:{
+                required: true
+            },
+            telefono:{
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            }, 
+        }, 
+        messages:{
+            nombre:{
+                required: "Ingrese nombre",
+                minlength: "Minimo 3 digitos"
+            }, 
+            direccion:{
+                required: "Ingrese Direccion"
+            },
+            telefono:{
+                required: "Ingrese Telefono",
+                minlength: "Minimo 10 digitos",
+                maxlength: "Maximo 10 digitos",
+            } 
+        },
+        submitHandler:function(formulario){
+            /* $.ajax({
+                url:"{% url 'guardarPelicula' %}",
+                type:'post',
+                data:$(formulario).serialize(),
+                success:function(data){
+                    if(data.estado){
+                        Swal.fire({
+                            title: "Confirmacion",
+                            text: data.mensaje,
+                            icon: 'success'
+                        });
+                        $("#exampleModal").modal('hide'),//cierra el modal
+                        $(formulario)[0].reset();//Resetea los campos del modal
+                        cargarPeliculas();
+                    }else{
+                        alert("error:()")
+                    }
+                },
+                
+            }); */
+
+            const formData = new FormData(formulario);
+            fetch("{% url 'guardarPelicula' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.estado){
+                    Swal.fire({
+                        title: "Confirmacion",
+                        text: data.mensaje,
+                        icon: 'success'
+                    });
+                    $("#exampleModal").modal('hide'); // cierra el modal
+                    formulario.reset(); // Resetea los campos del modal
+                    cargarPeliculas();
+                } else {
+                    alert("error:()");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    })
+
+    function cargarPeliculas(){
+        $("#contenedor-Peliculas")
+        .load('{% url "listadoPeliculas" %}')
+    }
+
+    cargarPeliculas();
+</script>
+{%endblock %}

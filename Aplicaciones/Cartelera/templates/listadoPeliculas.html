@@ -1,0 +1,56 @@
+<table class="table table-bordered table-striped table-hover" id="tbl-peliculas">
+    <thead>
+        <tr>
+            <th class="text-center">ID</th>
+            <th class="text-center">TITULO</th>
+            <th class="text-center">DURACION</th>
+            <th class="text-center">SINOPSIS</th>
+            <th class="text-center">GENERO</th>
+            <th class="text-center">DIRECTOR</th>
+            <th class="text-center">PAIS</th>
+            <th class="text-center">PORTADA</th>
+            <th class="text-center">ACCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for peliculaTemporal in peliculas %}
+            <tr>
+                <td>{{ peliculaTemporal.id }}</td>
+                <td>{{ peliculaTemporal.titulo }}</td>
+                <td>{{ peliculaTemporal.duracion }}</td>
+                <td>{{ peliculaTemporal.sinopsis }}</td>
+                <td>{{ peliculaTemporal.genero }}</td>
+                <td>{{ peliculaTemporal.director }}</td>
+                <td>{{ peliculaTemporal.pais }}</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ peliculaTemporal.portada.url }}" alt="" height="100px" width="100px">
+                        </button>
+                        <ul class="dropdown-menu">
+                        <li><a download class="dropdown-item" href="{{ peliculaTemporal.portada.url }}">Descargar</a></li>
+                        <li><a class="dropdown-item" href="{{ peliculaTemporal.portada.url }}" target="_blank">Ver</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <a href="" class="btn btn-outline-warning btn-circle"
+                    title="Editar Cine">
+                        <i class="fas fa-pencil"></i>
+                    </a>
+                    <a href="" onclick="return confirm('¿Estás seguro?');" class="btn btn-outline-danger btn-circle">
+                        <i class="fas fa-trash"> </i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    var table = new DataTable('#tbl-peliculas');
+</script>
+<style>
+    .btn-circle{
+        border-radius:100px !important;
+    }
+</style>
